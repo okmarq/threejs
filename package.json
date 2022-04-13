@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "three": "^0.139.2"
+  },
+  "devDependencies": {
+    "webpack": "^5.72.0"
   }
 }
