@@ -1,3 +1,5 @@
+import './css/StyleSheet.css'
+import { SphereGeometry } from 'three'
 import { Scene, Clock, PointLight } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
@@ -8,14 +10,14 @@ const canvas = document.querySelector('canvas.webgl')
 const scene = new Scene()
 
 // Objects
-const geometry = new BoxGeometry()
+const geometry = new SphereGeometry()
 
 // Materials
 const material = new MeshBasicMaterial({ color: 0x00ff00 })
 
 // Mesh
-const cube = new Mesh(geometry, material)
-scene.add(cube)
+const sphere = new Mesh(geometry, material)
+scene.add(sphere)
 
 // Lights
 const pointLight = new PointLight(0xffffff, 0.1)
@@ -53,7 +55,7 @@ window.addEventListener('resize', () => {
 const camera = new PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000)
 // camera.position.x = 0
 // camera.position.y = 0
-// camera.position.z = 5
+// camera.position.z = 30
 
 // Controls
 // const controls = new OrbitControls(camera, canvas)
@@ -78,8 +80,8 @@ const tick = () => {
 	const elapsedTime = clock.getElapsedTime()
 
 	// Update objects
-	// cube.rotation.x += .5 * elapsedTime
-	// cube.rotation.y += .5 * elapsedTime
+	// sphere.rotation.x += .5 * elapsedTime
+	// sphere.rotation.y += .5 * elapsedTime
 
 	// Update Orbital Controls
 	// controls.update()
@@ -94,13 +96,8 @@ const tick = () => {
 tick()
 
 
+// cameraControls.addEventListener('mousemove',
+// 	renderer)
+// cameraControls.autoRotate = true
 
-scene.add(camera)
-
-const cameraControls = new OrbitControls(camera, renderer.domElement)
-
-cameraControls.addEventListener('mousemove',
-	renderer)
-cameraControls.autoRotate = true
-
-document.body.appendChild(renderer.domElement)
+// document.body.appendChild(renderer.domElement)
