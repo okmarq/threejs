@@ -1,7 +1,21 @@
 {
-  "repository": "#",
-  "license": "UNLICENSED",
+  "name": "threejs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/okmarq/threejs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/okmarq/threejs/issues"
+  },
+  "homepage": "https://github.com/okmarq/threejs#readme",
+  "description": "Courtesy of Bruno Simon of https://threejs-journey.xyz/",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config ./bundler/webpack.prod.js",
     "dev": "webpack serve --config ./bundler/webpack.dev.js"
   },
@@ -23,7 +37,7 @@
     "three": "^0.126.0",
     "webpack": "^5.24.2",
     "webpack-cli": "^4.5.0",
-    "webpack-dev-server": "^3.11.2",
+    "webpack-dev-server": "^4.8.1",
     "webpack-merge": "^5.7.3"
   }
 }
