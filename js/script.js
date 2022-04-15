@@ -1,32 +1,32 @@
-import './style.css'
-import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import * as dat from 'dat.gui'
+// import * as THREE from 'three'
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+// import * as dat from 'dat.gui'
 
+let scene, sphere, pointLight, camera, renderer, clock
 // Debug
-const gui = new dat.GUI()
+// const gui = new dat.GUI()
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
 // Scene
-const scene = new THREE.Scene()
+scene = new THREE.Scene()
 
 // Objects
-const geometry = new THREE.TorusGeometry( .7, .2, 16, 100 );
+const geometry = new THREE.SphereGeometry( 10, 64, 32 );
 
-// Materials
-
-const material = new THREE.MeshBasicMaterial()
-material.color = new THREE.Color(0xff0000)
+// Materials or Textures
+const texture = new THREE.TextureLoader().load('/assets/textures/gb3.jpg')
+const material = new THREE.MeshBasicMaterial({map: texture})
+// material.color = new THREE.Color(0xffffff)
 
 // Mesh
-const sphere = new THREE.Mesh(geometry,material)
+sphere = new THREE.Mesh(geometry, material)
 scene.add(sphere)
 
 // Lights
 
-const pointLight = new THREE.PointLight(0xffffff, 0.1)
+pointLight = new THREE.PointLight(0xffffff, 0.1)
 pointLight.position.x = 2
 pointLight.position.y = 3
 pointLight.position.z = 4
@@ -40,8 +40,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -59,10 +58,10 @@ window.addEventListener('resize', () =>
  * Camera
  */
 // Base camera
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
+camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000)
 camera.position.x = 0
 camera.position.y = 0
-camera.position.z = 2
+camera.position.z = 30
 scene.add(camera)
 
 // Controls
@@ -72,7 +71,8 @@ scene.add(camera)
 /**
  * Renderer
  */
-const renderer = new THREE.WebGLRenderer({
+renderer = new THREE.WebGLRenderer({
+    antialias: true,
     canvas: canvas
 })
 renderer.setSize(sizes.width, sizes.height)
@@ -82,15 +82,16 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  * Animate
  */
 
-const clock = new THREE.Clock()
+clock = new THREE.Clock()
 
-const tick = () =>
-{
+const tick = () => {
 
     const elapsedTime = clock.getElapsedTime()
 
     // Update objects
+    sphere.rotation.x = .5 * elapsedTime
     sphere.rotation.y = .5 * elapsedTime
+    sphere.rotation.z = .5 * elapsedTime
 
     // Update Orbital Controls
     // controls.update()
