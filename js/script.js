@@ -2,6 +2,7 @@
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 // import * as dat from 'dat.gui'
 
+// initialize variables to allow for easy customization and reuse
 let scene, sphere, pointLight, camera, renderer, clock
 // Debug
 // const gui = new dat.GUI()
@@ -25,7 +26,6 @@ sphere = new THREE.Mesh(geometry, material)
 scene.add(sphere)
 
 // Lights
-
 pointLight = new THREE.PointLight(0xffffff, 0.1)
 pointLight.position.x = 2
 pointLight.position.y = 3
