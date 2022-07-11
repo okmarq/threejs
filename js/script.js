@@ -89,20 +89,12 @@ window.addEventListener('resize', () => {
 camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000)
 
 camera.position.set(0, 0, 100)
-
-
-
 // camera.lookAt(0, 0, 0)
-
 scene.add(camera)
 
-
-
 // Controls
-
-// const controls = new OrbitControls(camera, canvas)
-
-// controls.enableDamping = true
+const controls = new OrbitControls(camera, canvas)
+controls.enableDamping = true
 
 
 
@@ -345,8 +337,7 @@ const animate = () => {
   }
 
   // Update Orbital Controls
-
-  // controls.update()
+  controls.update()
 
   // I could make the circle revolve about the screen by updating the camera position for z-axis but that would be for another assignment
 
