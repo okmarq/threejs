@@ -1,16 +1,223 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ThreeJS</title>
-    <link href="css/style.css" rel="stylesheet" type="text/css">
-    <link rel="shortcut icon" type="image/png" href="/assets/images/sb.png">
+    <script
+      type="text/javascript"
+      src="https://getfirebug.com/firebug-lite-debug.js"
+    ></script>
+    <meta name="description" content="CS4406 Computer Graphics - Exercise #3" />
+    <meta charset="utf-8" />
+    <title>Sample Three.js</title>
+    <style>
+      #container {
+        background: #000000;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <meta charset="utf-8" />
+    <title>CS4406 Computer Graphics - Exercise #3</title>
+
+    <style id="jsbin-css"></style>
   </head>
   <body>
-    <canvas class="webgl"></canvas>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
-    <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
-    <script src="/js/script.js"></script>
+    <div id="container"></div>
   </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+  <script src="http://uopeopleweb.com/js/dat.gui.min.js"></script>
+  <script src="https://threejs.org/build/three.js"></script>
+  <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
+  <script src="http://uopeopleweb.com/js/math.js"></script>
+  <script src="http://uopeopleweb.com/js/Detector.js"></script>
+  <script type="text/javascript">
+    // set the scene size
+    var WIDTH = 500,
+      HEIGHT = 500
+
+    // set some camera attributes
+    var VIEW_ANGLE = 45,
+      ASPECT = WIDTH / HEIGHT,
+      NEAR = 1,
+      FAR = 1000
+
+    // get the DOM element to attach to
+    var $container = $('#container')
+
+    // create a WebGL renderer, camera, and a scene
+    // NOTE: for the assignment in Unit 4 where you need to use a texture, or in any other assignment where a texture is required
+    // you should deactivate the Detector and use ONLY the CanvasRenderer.  There are some issues in using waht are called Cross Domain images for
+    // for textures.   You can get more details by looking up WebGL and CORS using Google search.  I have included some code below that will
+    // get around this issue that you can use.
+
+    var renderer = new THREE.WebGLRenderer()
+    var scene = new THREE.Scene()
+    var clock = new THREE.Clock()
+    var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR)
+    // the camera starts at 0,0,0 so pull it back
+    // the camera starts at 0,0,0 so pull it back for some assignments you may need to adjust this value
+    // some distance to make the scene visible properly
+    camera.position.z = 200
+    // add the camera to the scene
+    scene.add(camera)
+
+    // set up the camera controls.  Please keep in mind that what this does is move the entire scene around.
+    // because the entire scene is moving the position of the camera and lights in relation to objects within
+    // the scene doesn't change so the lighting on the surface of the object(s) will not change either
+    var cameraControls = new THREE.OrbitControls(camera, renderer.domElement)
+    cameraControls.addEventListener('mousemove', renderer)
+
+    // start the renderer
+    renderer.setSize(WIDTH, HEIGHT)
+    // enable shadow in renderer
+    renderer.shadowMap.enabled = true
+    // set a soft shadow for renderer (default THREE.PCFShadowMap)
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap
+
+    // attach the render-supplied DOM element
+    $container.append(renderer.domElement)
+
+    // ----------------------------------------------------------------------------------------
+    //  END OF THE STANDARD CODE FOR THE ASSIGNMENT
+    //  Following this is where you must place your own custom code to complete the assignment
+    // ----------------------------------------------------------------------------------------
+
+    // create a directional light that casts white light and turn on shadows for the light
+    const light = new THREE.SpotLight(0xffffaa) // color, intensity
+
+    // define a fixed position for the light
+    // the light is in the top left corner and slightly to the front of the object
+    // the chosen position shows the color change well
+    light.position.set(-20, 70, 10)
+    // set the castShadow for the light to true, enable the methane to cast shadow
+    light.castShadow = true
+    // add the light to the scene
+    scene.add(light)
+
+    //Set up shadow properties for the light
+    light.shadow.mapSize.width = 512 // default
+    light.shadow.mapSize.height = 512 // default
+    light.shadow.camera.near = 0.5 // default
+    light.shadow.camera.far = 500 // default
+
+    // create a floor for the methane using a plane geometry
+    const geometry = new THREE.PlaneGeometry(150, 150)
+    const material = new THREE.MeshStandardMaterial({
+      color: 0xff00,
+      side: THREE.DoubleSide,
+    })
+    const floor = new THREE.Mesh(geometry, material)
+    floor.rotateX(-Math.PI / 2)
+    floor.position.set(0, -30, 0)
+    // make the floor receive shadows from objects above
+    floor.receiveShadow = true
+    // add floor to scene
+    scene.add(floor)
+
+    // add methane objects by making cylinder, and sphere object geometry
+    const tube = new THREE.CylinderGeometry(2, 2, 30, 64, 64, true)
+    const sphere1 = new THREE.SphereGeometry(10, 64, 32)
+    const sphere2 = new THREE.SphereGeometry(5, 64, 32)
+
+    // make the material reflective of light
+    const whiteMaterial = new THREE.MeshPhongMaterial({
+      color: 0xffffff,
+      emissive: 0xd3d3d3,
+    })
+    const redMaterial = new THREE.MeshPhongMaterial({
+      color: 0xff0000,
+    })
+    const blueMaterial = new THREE.MeshPhongMaterial({
+      color: 0x0000ff,
+    })
+    // mesh the material and geometry to create the final object
+    const bond1 = new THREE.Mesh(tube, whiteMaterial)
+    const bond2 = new THREE.Mesh(tube, whiteMaterial)
+    const bond3 = new THREE.Mesh(tube, whiteMaterial)
+    const bond4 = new THREE.Mesh(tube, whiteMaterial)
+    const carbon = new THREE.Mesh(sphere1, redMaterial)
+    const hydrogen1 = new THREE.Mesh(sphere2, blueMaterial)
+    const hydrogen2 = new THREE.Mesh(sphere2, blueMaterial)
+    const hydrogen3 = new THREE.Mesh(sphere2, blueMaterial)
+    const hydrogen4 = new THREE.Mesh(sphere2, blueMaterial)
+
+    // set cast shadow to true for each of the object created
+    bond1.castShadow = true
+    bond2.castShadow = true
+    bond3.castShadow = true
+    bond4.castShadow = true
+    carbon.castShadow = true
+    hydrogen1.castShadow = true
+    hydrogen2.castShadow = true
+    hydrogen3.castShadow = true
+    hydrogen4.castShadow = true
+
+    // place the object in a fixed position and rotation to put together the methane molecule.
+    // using group, the sphere and the tube are grouped to create each hydrogen atom and finally grouped with the larger sphere to attach hydrogen atom with carbon atom to formmethane molecule
+    bond1.position.set(0, 0, 0)
+    hydrogen1.position.set(0, 20, 0)
+    const hydrogenBond1 = new THREE.Group()
+    hydrogenBond1.add(bond1)
+    hydrogenBond1.add(hydrogen1)
+
+    bond2.position.set(0, 0, 0)
+    hydrogen2.position.set(0, 20, 0)
+    const hydrogenBond2 = new THREE.Group()
+    hydrogenBond2.add(bond2)
+    hydrogenBond2.add(hydrogen2)
+
+    bond3.position.set(0, 0, 0)
+    hydrogen3.position.set(0, 20, 0)
+    const hydrogenBond3 = new THREE.Group()
+    hydrogenBond3.add(bond3)
+    hydrogenBond3.add(hydrogen3)
+
+    bond4.position.set(0, 0, 0)
+    hydrogen4.position.set(0, 20, 0)
+    const hydrogenBond4 = new THREE.Group()
+    hydrogenBond4.add(bond4)
+    hydrogenBond4.add(hydrogen4)
+
+    hydrogenBond1.position.set(0, 20, 0)
+    hydrogenBond2.position.set(-20, -5, -10)
+    hydrogenBond3.position.set(20, -5, -10)
+    hydrogenBond4.position.set(0, -10, 20)
+
+    hydrogenBond1.rotation.set(0, 0, 0)
+    hydrogenBond2.rotation.set(Math.PI / 3, 0, (2 * Math.PI) / 3)
+    hydrogenBond3.rotation.set(Math.PI / 3, 0, (-2 * Math.PI) / 3)
+    hydrogenBond4.rotation.set((2 * Math.PI) / 3, 0, 0)
+
+    carbon.position.set(0, 0, 0)
+
+    const methane = new THREE.Group()
+    methane.add(carbon)
+    methane.add(hydrogenBond1)
+    methane.add(hydrogenBond2)
+    methane.add(hydrogenBond3)
+    methane.add(hydrogenBond4)
+
+    // add methane to scene
+    scene.add(methane)
+
+    // animate function calls requestAnimationFrame to call animate
+    // this creates a loop that will render the scene again
+    // whenever something within the scene changes
+
+    // the clock is used to time the animation.
+    // using the animate function which is recursive, the renderer renders the scene over and over at every elapsed timed
+    clock = new THREE.Clock()
+
+    const animate = () => {
+      const elapsedTime = clock.getElapsedTime()
+
+      // the rotation of the methane goes about the y axes.
+      methane.rotation.y = -1 * elapsedTime
+
+      requestAnimationFrame(animate)
+
+      renderer.render(scene, camera)
+    }
+    // call the animate function to start the animation
+    animate()
+  </script>
 </html>
